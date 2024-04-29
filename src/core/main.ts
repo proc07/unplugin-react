@@ -28,8 +28,6 @@ export async function transformMain(
     pluginContext,
   )
 
-  // console.log('scriptCode', scriptCode)
-
   return {
     code: scriptCode,
     map: scriptMap as any as TypeScriptMap || {

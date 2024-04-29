@@ -22,9 +22,9 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.24.1
         version: 7.24.1(@babel/core@7.24.4)
-      '@vue/compiler-dom':
-        specifier: ^3.4.25
-        version: 3.4.25
+      '@babel/traverse':
+        specifier: ^7.24.1
+        version: 7.24.1
       '@vue/compiler-sfc':
         specifier: ^3.4.21
         version: 3.4.21
@@ -2107,28 +2107,11 @@ packages:
       source-map-js: 1.2.0
     dev: false
 
-  /@vue/compiler-core@3.4.25:
-    resolution: {integrity: sha512-Y2pLLopaElgWnMNolgG8w3C5nNUVev80L7hdQ5iIKPtMJvhVpG0zhnBG/g3UajJmZdvW0fktyZTotEHD1Srhbg==}
-    dependencies:
-      '@babel/parser': 7.24.4
-      '@vue/shared': 3.4.25
-      entities: 4.5.0
-      estree-walker: 2.0.2
-      source-map-js: 1.2.0
-    dev: false
-
   /@vue/compiler-dom@3.4.21:
     resolution: {integrity: sha512-IZC6FKowtT1sl0CR5DpXSiEB5ayw75oT2bma1BEhV7RRR1+cfwLrxc2Z8Zq/RGFzJ8w5r9QtCOvTjQgdn0IKmA==}
     dependencies:
       '@vue/compiler-core': 3.4.21
       '@vue/shared': 3.4.21
-    dev: false
-
-  /@vue/compiler-dom@3.4.25:
-    resolution: {integrity: sha512-Ugz5DusW57+HjllAugLci19NsDK+VyjGvmbB2TXaTcSlQxwL++2PETHx/+Qv6qFwNLzSt7HKepPe4DcTE3pBWg==}
-    dependencies:
-      '@vue/compiler-core': 3.4.25
-      '@vue/shared': 3.4.25
     dev: false
 
   /@vue/compiler-sfc@3.4.21:
@@ -2154,10 +2137,6 @@ packages:
 
   /@vue/shared@3.4.21:
     resolution: {integrity: sha512-PuJe7vDIi6VYSinuEbUIQgMIRZGgM8e4R+G+/dQTk0X1NEdvgvvgv7m+rfmDH1gZzyA1OjjoWskvHlfRNfQf3g==}
-    dev: false
-
-  /@vue/shared@3.4.25:
-    resolution: {integrity: sha512-k0yappJ77g2+KNrIaF0FFnzwLvUBLUYr8VOwz+/6vLsmItFp51AcxLL7Ey3iPd7BIRyWPOcqUjMnm7OkahXllA==}
     dev: false
 
   /@webassemblyjs/ast@1.12.1:

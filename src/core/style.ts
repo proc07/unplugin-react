@@ -19,7 +19,8 @@ export async function transformStyle(
   // applying SFC-specific transforms like scoped mode and CSS vars rewrite (v-bind(var))
   const result = await options.compiler.compileStyleAsync({
     filename: descriptor.filename,
-    id: `data-r-${descriptor.id}`,
+    // Hard code 'data-v': https://github.com/vuejs/core/blob/main/packages/compiler-sfc/src/compileStyle.ts#L112
+    id: `data-v-${descriptor.id}`,
     isProd: options.isProduction,
     source: code,
     scoped: block.scoped,

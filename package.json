@@ -116,7 +116,6 @@
     "@babel/plugin-transform-runtime": "^7.24.3",
     "@babel/preset-react": "^7.24.1",
     "@babel/preset-typescript": "^7.24.1",
-    "@vue/compiler-dom": "^3.4.25",
     "@vue/compiler-sfc": "^3.4.21",
     "react-refresh": "^0.14.0",
     "unplugin": "^1.5.1",

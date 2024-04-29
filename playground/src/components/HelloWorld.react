@@ -11,14 +11,16 @@ export default function({msg}) {
 </script>
 
 <template>
-  <h1>props: {msg}</h1>
+  <div className="HelloWorld">
+    <h1>props: {msg}</h1>
 
-  <div className="card">
-    <p>
-      <code>components/HelloWorld.vue</code>
-    </p>
+    <div className="card">
+      <p>
+        <code>components/HelloWorld.vue</code>
+      </p>
+    </div>
+    <p className="read-the-docs">HelloWorld details</p>
   </div>
-  <p className="read-the-docs">HelloWorld details</p>
 </template>
 
 <style>

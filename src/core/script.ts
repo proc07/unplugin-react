@@ -1,7 +1,9 @@
 import type { SFCDescriptor, SFCScriptBlock } from '@vue/compiler-sfc'
 import type { RawSourceMap } from 'source-map-js'
 import type { Statement } from '@babel/types'
-import traverse from "@babel/traverse"
+import t from '@babel/types'
+import * as parser from "@babel/parser"
+const generate = require("@babel/generator").default
 import type * as babelCore from '@babel/core'
 import type { Context, BabelOptions, ReactBabelOptions, ResolvedOptions } from '../types'
 import { ScriptCompileContext,} from './utils/context'
@@ -70,11 +72,33 @@ export async function resolveScript(
   if (!sfc.script)
     return null
 
+  const babel = await loadBabel()
+
   // template
   let templateCode = ''
   if (sfc.template) {
     ;({ code: templateCode } = getTemplateCode(sfc))
   }
+
+  const templateAst = parser.parse(`<>${templateCode}</>`, {
+    sourceType: "module",
+    plugins: ["jsx"],
+  })
+
+  babel.traverse(templateAst, {
+    JSXElement(path) {
+      const openingElement = path.node.openingElement
+      if (openingElement.name.type === "JSXIdentifier") {
+        const dataRAttribute = t.jsxAttribute(
+          t.jsxIdentifier("data-v-" + sfc.id),
+          t.stringLiteral(""),
+        )
+        openingElement.attributes.push(dataRAttribute)
+      }
+    },
+  })
+
+  const { code: genTemplateCode } =  generate(templateAst, { sourceMaps: false })
 
   // style
   const stylesCode = await genStyleCode(
@@ -82,8 +106,8 @@ export async function resolveScript(
     pluginContext,
   )
 
-  const ctx = new ScriptCompileContext(sfc, options)
   const { script, source, filename } = sfc
+  const ctx = new ScriptCompileContext(sfc, options)
   const scriptAst = ctx.scriptAst
 
   // string offsets
@@ -141,7 +165,7 @@ export async function resolveScript(
     }
 
     if (!hasReturnStatement && exportDefaultEndPosition) {
-      const returncode = `\n  return <>${templateCode}</>\n`
+      const returncode = `\n  return ${genTemplateCode}\n`
       ctx.s.prependLeft(scriptStartOffset + exportDefaultEndPosition - 1, returncode)
     }
   }
@@ -221,8 +245,6 @@ export async function resolveScript(
     if (sfc.script.lang === 'tsx')
       parserPlugins.push('typescript')
 
-    const babel = await loadBabel()
-
     result = await babel.transformAsync(code, {
       ...babelOptions,
       ast: true,
@@ -244,15 +266,6 @@ export async function resolveScript(
       presets: ['@babel/preset-typescript', '@babel/preset-react'],
       plugins,
       sourceMaps: true,
-    })
-
-    traverse(result?.ast!, {
-      enter(path) {
-        console.log(path, 'path')
-        if (path.isIdentifier({ name: "n" })) {
-          path.node.name = "x";
-        }
-      },
     })
   }
 
