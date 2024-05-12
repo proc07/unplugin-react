@@ -1,0 +1,13 @@
+<script lang="tsx">
+export default function() {
+  // const [count, setCount] = useState(0)
+}
+</script>
+
+<template lang="tsx">
+  {
+    [1, 2, 3].map((item: number) => {
+      return <h1>{item}: Vite + React</h1>
+    })
+  }
+</template>

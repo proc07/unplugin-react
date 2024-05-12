@@ -59,8 +59,8 @@ function getTemplateCode(descriptor: SFCDescriptor) {
     // error
   }
   return {
-    code: template?.content || '<></>',
-    map: template?.map,
+    code: template?.content!,
+    map: template?.map!,
   }
 }
 
@@ -75,30 +75,30 @@ export async function resolveScript(
   const babel = await loadBabel()
 
   // template
-  let templateCode = ''
+  let templateCode = '<></>'
   if (sfc.template) {
     ;({ code: templateCode } = getTemplateCode(sfc))
+
+    const templateAst = parser.parse(`<>${templateCode}</>`, {
+      sourceType: "module",
+      plugins: ['jsx', sfc.template?.lang === 'tsx' ? 'typescript' : 'jsx'],
+    })
+  
+    babel.traverse(templateAst, {
+      JSXElement(path) {
+        const openingElement = path.node.openingElement
+        if (openingElement.name.type === "JSXIdentifier") {
+          const dataRAttribute = t.jsxAttribute(
+            t.jsxIdentifier("data-v-" + sfc.id),
+            t.stringLiteral(""),
+          )
+          openingElement.attributes.push(dataRAttribute)
+        }
+      },
+    })
+  
+    ;({ code: templateCode } =  generate(templateAst, { sourceMaps: false }))
   }
-
-  const templateAst = parser.parse(`<>${templateCode}</>`, {
-    sourceType: "module",
-    plugins: ["jsx"],
-  })
-
-  babel.traverse(templateAst, {
-    JSXElement(path) {
-      const openingElement = path.node.openingElement
-      if (openingElement.name.type === "JSXIdentifier") {
-        const dataRAttribute = t.jsxAttribute(
-          t.jsxIdentifier("data-v-" + sfc.id),
-          t.stringLiteral(""),
-        )
-        openingElement.attributes.push(dataRAttribute)
-      }
-    },
-  })
-
-  const { code: genTemplateCode } =  generate(templateAst, { sourceMaps: false })
 
   // style
   const stylesCode = await genStyleCode(
@@ -165,7 +165,7 @@ export async function resolveScript(
     }
 
     if (!hasReturnStatement && exportDefaultEndPosition) {
-      const returncode = `\n  return ${genTemplateCode}\n`
+      const returncode = `\n  return ${templateCode}\n`
       ctx.s.prependLeft(scriptStartOffset + exportDefaultEndPosition - 1, returncode)
     }
   }

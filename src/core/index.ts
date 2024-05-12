@@ -101,7 +101,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined, false> = (raw
     // loadInclude(id) {},
     load(id) {
       const { filename, query } = parseReactRequest(id)
-      console.log('load', filename, query)
+
       // select corresponding block for sub-part virtual modules
       if (query.react) {
         if (query.src) {
@@ -133,7 +133,6 @@ export const unpluginFactory: UnpluginFactory<Options | undefined, false> = (raw
       return true
     },
     transform(code, id) {
-      console.log('transform', id)
       const { filename, query } = parseReactRequest(id)
       const context = Object.assign({}, this, meta)
 

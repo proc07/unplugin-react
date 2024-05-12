@@ -16,7 +16,12 @@ export default function({ msg }) {
 }
 </script>
 
-<template lang="jsx">
+<template lang="tsx">
+  {
+    [1, 2, 3].map((item: number) => {
+      return <h1 key={item}>{item}: Vite + React</h1>
+    })
+  }
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src={viteLogo} className="logo" alt="Vite logo" />
